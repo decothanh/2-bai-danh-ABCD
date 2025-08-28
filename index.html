@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2 Chiến Thuật Trading Chuyên Nghiệp - Volume Profile Integration</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .gradient-green { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
+        .gradient-red { background: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%); }
+        .gradient-yellow { background: linear-gradient(135deg, #fdbb2d 0%, #22c1c3 100%); }
+        .gradient-blue { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .text-shadow { text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .box-glow { box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+
+    <!-- Header -->
+    <header class="gradient-bg text-white py-16 text-center">
+        <div class="container mx-auto px-4">
+            <h1 class="text-5xl font-bold mb-4 text-shadow">
+                <i class="fas fa-chart-line mr-4"></i>2 CHIẾN THUẬT TRADING CHUYÊN NGHIỆP
+            </h1>
+            <p class="text-xl text-shadow">Tư duy Pro Trader - Phân tích sóng và Volume Profile chuyên sâu</p>
+            <div class="flex justify-center mt-8 space-x-8">
+                <div class="text-center">
+                    <i class="fas fa-arrow-down text-3xl mb-2"></i>
+                    <p class="font-semibold">Chặn Sóng Đẩy</p>
+                </div>
+                <div class="text-center">
+                    <i class="fas fa-arrow-up text-3xl mb-2"></i>
+                    <p class="font-semibold">Bắt Cuối Sóng Hồi</p>
+                </div>
+                <div class="text-center">
+                    <i class="fas fa-volume-up text-3xl mb-2"></i>
+                    <p class="font-semibold">Volume Profile</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-8">
+
+        <!-- Bài Đánh Chặn Sóng Đẩy -->
+        <section class="mb-16">
+            <div class="gradient-red text-white p-8 rounded-2xl mb-8 box-glow">
+                <h2 class="text-4xl font-bold text-center mb-4">
+                    <i class="fas fa-stop-circle mr-3"></i>BÀI ĐÁNH CHẶN SÓNG ĐẨY
+                </h2>
+                <p class="text-center text-xl">Xác định và khai thác điểm kiệt sức của sóng đẩy để đảo chiều xu hướng</p>
+            </div>
+
+            <!-- Khái niệm Cốt lõi -->
+            <div class="bg-white rounded-xl p-6 mb-8 box-glow">
+                <h3 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-lightbulb text-yellow-500 mr-3"></i>Khái niệm Cốt lõi
+                </h3>
+                
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+                        <h4 class="font-bold text-blue-700 mb-2">
+                            <i class="fas fa-arrow-up mr-2"></i>Đoạn Đẩy của Sóng Đẩy
+                        </h4>
+                        <p class="text-sm">Sóng break có sự ủng hộ của <strong>volume tăng mạnh</strong> - đại diện cho hoạt động institutional</p>
+                    </div>
+                    
+                    <div class="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-500">
+                        <h4 class="font-bold text-orange-700 mb-2">
+                            <i class="fas fa-battery-quarter mr-2"></i>Đoạn Kiệt sức
+                        </h4>
+                        <p class="text-sm">Đoạn break nối tiếp với <strong>volume giảm dần</strong> - thiếu conviction từ buyers</p>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
+                        <h4 class="font-bold text-green-700 mb-2">
+                            <i class="fas fa-undo mr-2"></i>Sóng Bẻ
+                        </h4>
+                        <p class="text-sm">Hành vi lấy thanh khoản sau đó quay đầu ngược chiều với <strong>volume tăng dần</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phân tích Cấu trúc 2 Giai đoạn -->
+            <div class="bg-white rounded-xl p-6 mb-8 box-glow">
+                <h3 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-layer-group text-purple-500 mr-3"></i>Phân tích Cấu trúc 2 Giai đoạn
+                </h3>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="gradient-red text-white p-6 rounded-lg">
+                        <h4 class="text-xl font-bold mb-4">
+                            <i class="fas fa-play mr-2"></i>GIAI ĐOẠN 1: GIAI ĐOẠN ĐẨY
+                        </h4>
+                        <ul class="space-y-2">
+                            <li><i class="fas fa-check-circle mr-2"></i><strong>Volume tăng mạnh</strong> (>150% trung bình)</li>
+                            <li><i class="fas fa-check-circle mr-2"></i><strong>Price action quyết đoán</strong>, ít pullback</li>
+                            <li><i class="fas fa-check-circle mr-2"></i><strong>Momentum tăng tốc</strong> rõ rệt</li>
+                            <li><i class="fas fa-check-circle mr-2"></i><strong>Break resistance</strong> một cách sạch sẽ</li>
+                        </ul>
+                        <div class="bg-red-800 p-3 mt-4 rounded">
+                            <p class="font-bold"><i class="fas fa-exclamation-triangle mr-2"></i>HÀNH ĐỘNG: TUYỆT ĐỐI KHÔNG COUNTER-TRADE!</p>
+                        </div>
+                    </div>
+                    
+                    <div class="gradient-blue text-white p-6 rounded-lg">
+                        <h4 class="text-xl font-bold mb-4">
+                            <i class="fas fa-pause mr-2"></i>GIAI ĐOẠN 2: GIAI ĐOẠN KIỆT SỨC
+                        </h4>
+                        <ul class="space-y-2">
+                            <li><i class="fas fa-exclamation-triangle mr-2"></i><strong>Volume giảm dần</strong> (<70% trung bình)</li>
+                            <li><i class="fas fa-exclamation-triangle mr-2"></i><strong>Price advance chậm lại</strong> dù có new highs</li>
+                            <li><i class="fas fa-exclamation-triangle mr-2"></i><strong>Momentum divergence</strong> xuất hiện</li>
+                            <li><i class="fas fa-exclamation-triangle mr-2"></i><strong>Volatility tăng</strong> nhưng no progress</li>
+                        </ul>
+                        <div class="bg-green-600 p-3 mt-4 rounded">
+                            <p class="font-bold"><i class="fas fa-crosshairs mr-2"></i>HÀNH ĐỘNG: CHUẨN BỊ REVERSAL ENTRY!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gradient-yellow text-black p-4 mt-6 rounded-lg text-center">
+                    <h4 class="text-lg font-bold mb-2">
+                        <i class="fas fa-crown mr-2"></i>NGUYÊN TẮC VÀNG
+                    </h4>
+                    <p class="font-semibold">"TUYỆT ĐỐI KHÔNG chống lại sóng ở Giai đoạn 1. CHỈ trade reversal ở Giai đoạn 2."</p>
+                </div>
+            </div>
+
+            <!-- Giao thức Entry -->
+            <div class="bg-white rounded-xl p-6 mb-8 box-glow">
+                <h3 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-crosshairs text-green-500 mr-3"></i>Giao thức Entry
+                </h3>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="gradient-green text-white p-6 rounded-lg">
+                        <h4 class="text-xl font-bold mb-4">
+                            <i class="fas fa-bolt mr-2"></i>ENTRY 1: Aggressive
+                        </h4>
+                        <ul class="space-y-2">
+                            <li><i class="fas fa-arrow-right mr-2"></i>Tìm entry theo <strong>Order Block</strong> của sóng bẻ</li>
+                            <li><i class="fas fa-arrow-right mr-2"></i>Risk cao nhưng <strong>reward tối ưu</strong></li>
+                            <li><i class="fas fa-arrow-right mr-2"></i>Dành cho trader có kinh nghiệm</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-blue-600 text-white p-6 rounded-lg">
+                        <h4 class="text-xl font-bold mb-4">
+                            <i class="fas fa-shield-alt mr-2"></i>ENTRY 2: Conservative
+                        </h4>
+                        <ul class="space-y-2">
+                            <li><i class="fas fa-arrow-right mr-2"></i>Chờ tín hiệu <strong>nến nhấn chìm</strong></li>
+                            <li><i class="fas fa-arrow-right mr-2"></i>Khi giá retest <strong>Order Block</strong></li>
+                            <li><i class="fas fa-arrow-right mr-2"></i>Probability cao hơn, risk thấp hơn</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quản lý Rủi ro & Take Profit -->
+            <div class="bg-white rounded-xl p-6 mb-8 box-glow">
+                <h3 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-shield-alt text-red-500 mr-3"></i>Quản lý Rủi ro & Take Profit
+                </h3>
+                
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="gradient-red text-white p-4 rounded-lg text-center">
+                        <i class="fas fa-bullseye text-3xl mb-3"></i>
+                        <h4 class="font-bold mb-2">Target 2R</h4>
+                        <p class="text-sm">Chốt 1/2 position → Move SL về BE</p>
+                    </div>
+                    
+                    <div class="gradient-yellow text-black p-4 rounded-lg text-center">
+                        <i class="fas fa-chart-line text-3xl mb-3"></i>
+                        <h4 class="font-bold mb-2">Phần còn lại</h4>
+                        <p class="text-sm">Trail stop theo ATR hoặc structure</p>
+                    </div>
+                    
+                    <div class="gradient-green text-white p-4 rounded-lg text-center">
+                        <i class="fas fa-trophy text-3xl mb-3"></i>
+                        <h4 class="font-bold mb-2">Final TP</h4>
+                        <p class="text-sm">Chốt tại đỉnh đối diện hoặc major level</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bài Đánh Cuối Sóng Hồi -->
+        <section class="mb-16">
+            <div class="gradient-green text-white p-8 rounded-2xl mb-8 box-glow">
+                <h2 class="text-4xl font-bold text-center mb-4">
+                    <i class="fas fa-rocket mr-3"></i>BÀI ĐÁNH CUỐI SÓNG HỒI
+                </h2>
+                <p class="text-center text-xl">Bắt đáy pullback để khởi động pha đẩy mới với tỷ lệ Risk/Reward vượt trội</p>
+            </div>
+
+            <!-- Triết lý Chiến thuật -->
+            <div class="bg-white rounded-xl p-6 mb-8 box-glow">
+                <h3 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-brain text-blue-500 mr-3"></i>Triết lý Chiến thuật
+                </h3>
+                
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+                        <h4 class="font-bold text-blue-700 mb-2">
+                            <i class="fas fa-arrow-down mr-2"></i>Đoạn Hồi của Sóng Hồi
+                        </h4>
+                        <p class="text-sm">Sóng pullback có sự ủng hộ của <strong>volume tăng</strong> - institutional profit-taking hoặc reaccumulation</p>
+                    </div>
+                    
+                    <div class="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-500">
+                        <h4 class="font-bold text-orange-700 mb-2">
+                            <i class="fas fa-battery-quarter mr-2"></i>Đoạn Kiệt sức Hồi
+                        </h4>
+                        <p class="text-sm">Đoạn pullback với <strong>volume giảm dần</strong> - lack of selling pressure, buyers preparing</p>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
+                        <h4 class="font-bold text-green-700 mb-2">
+                            <i class="fas fa-rocket mr-2"></i>Sóng Khởi động
+                        </h4>
+                        <p class="text-sm">Hành vi absorb liquidity sau đó <strong>reverse theo trend direction</strong> với volume spike</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phân tích Pullback 2 Giai đoạn -->
+            <div class="bg-white rounded-xl p-6 mb-8 box-glow">
+                <h3 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-layer-group text-purple-500 mr-3"></i>Phân tích Pullback 2 Giai đoạn
+                </h3>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-red-100 border-l-4 border-red-500 p-6 rounded-lg">
+                        <h4 class="text-xl font-bold mb-4 text-red-700">
+                            <i class="fas fa-play mr-2"></i>PHASE 1: GIAI ĐOẠN HỒI
+                        </h4>
+                        <ul class="space-y-2 text-gray-700">
+                            <li><i class="fas fa-check-circle text-green-600 mr-2"></i><strong>Volume tăng trong decline</strong> (institutional activity)</li>
+                            <li><i class="fas fa-check-circle text-green-600 mr-2"></i><strong>Clean break</strong> của minor support levels</li>
+                            <li><i class="fas fa-check-circle text-green-600 mr-2"></i><strong>Pullback 38.2%-61.8%</strong> của impulse trước</li>
+                            <li><i class="fas fa-check-circle text-green-600 mr-2"></i><strong>Swift movement</strong>, ít bounce</li>
+                        </ul>
+                        <div class="bg-red-200 p-3 mt-4 rounded">
+                            <p class="font-bold text-red-800"><i class="fas fa-eye mr-2"></i>HÀNH ĐỘNG: OBSERVE - Healthy pullback!</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-green-100 border-l-4 border-green-500 p-6 rounded-lg">
+                        <h4 class="text-xl font-bold mb-4 text-green-700">
+                            <i class="fas fa-pause mr-2"></i>PHASE 2: KIỆT SỨC HỒI
+                        </h4>
+                        <ul class="space-y-2 text-gray-700">
+                            <li><i class="fas fa-exclamation-triangle text-orange-500 mr-2"></i><strong>Volume giảm dần</strong> trong decline (<60% average)</li>
+                            <li><i class="fas fa-exclamation-triangle text-orange-500 mr-2"></i><strong>Price decline chậm lại</strong> dù có lower lows</li>
+                            <li><i class="fas fa-exclamation-triangle text-orange-500 mr-2"></i><strong>Bullish divergence</strong> trên RSI/MACD</li>
+                            <li><i class="fas fa-exclamation-triangle text-orange-500 mr-2"></i><strong>Support holding</strong> với multiple tests</li>
+                        </ul>
+                        <div class="bg-green-200 p-3 mt-4 rounded">
+                            <p class="font-bold text-green-800"><i class="fas fa-crosshairs mr-2"></i>HÀNH ĐỘNG: CHUẨN BỊ TREND CONTINUATION!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Entry Protocol -->
+            <div class="bg-white rounded-xl p-6 mb-8 box-glow">
+                <h3 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-crosshairs text-green-500 mr-3"></i>Entry Protocol
+                </h3>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="gradient-green text-white p-6 rounded-lg">
+                        <h4 class="text-xl font-bold mb-4">
+                            <i class="fas fa-bolt mr-2"></i>ENTRY 1: Aggressive
+                        </h4>
+                        <ul class="space-y-2">
+                            <li><i class="fas fa-arrow-right mr-2"></i>Entry theo <strong>Order Block</strong> của sóng khởi động</li>
+                            <li><i class="fas fa-arrow-right mr-2"></i>Entry gần <strong>pullback low</strong></li>
+                            <li><i class="fas fa-arrow-right mr-2"></i>Higher risk but <strong>maximum reward potential</strong></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-blue-600 text-white p-6 rounded-lg">
+                        <h4 class="text-xl font-bold mb-4">
+                            <i class="fas fa-shield-alt mr-2"></i>ENTRY 2: Conservative
+                        </h4>
+                        <ul class="space-y-2">
+                            <li><i class="fas fa-arrow-right mr-2"></i>Chờ <strong>break structure</strong> của pullback</li>
+                            <li><i class="fas fa-arrow-right mr-2"></i>Retest của <strong>breakout level</strong></li>
+                            <li><i class="fas fa-arrow-right mr-2"></i>Lower risk but <strong>excellent R:R ratio</strong></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Superior Setup Advantages -->
+            <div class="bg-white rounded-xl p-6 mb-8 box-glow">
+                <h3 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-gem text-purple-500 mr-3"></i>Tại sao Setup này Vượt trội
+                </h3>
+                
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="bg-purple-100 p-4 rounded-lg text-center border-l-4 border-purple-500">
+                        <i class="fas fa-balance-scale text-purple-600 text-3xl mb-3"></i>
+                        <h4 class="font-bold text-purple-700 mb-2">Risk-Reward Advantage</h4>
+                        <p class="text-sm text-gray-700">Entry gần pullback low = Tight stop loss<br>TP tại trend continuation = Extended targets<br><strong>Typical R:R = 1:4 đến 1:8</strong></p>
+                    </div>
+                    
+                    <div class="bg-green-100 p-4 rounded-lg text-center border-l-4 border-green-500">
+                        <i class="fas fa-percentage text-green-600 text-3xl mb-3"></i>
+                        <h4 class="font-bold text-green-700 mb-2">Probability Edge</h4>
+                        <p class="text-sm text-gray-700">Trend continuation >70% success rate<br>Entry tại exhaustion point = optimal timing<br><strong>Multiple confluences</strong></p>
+                    </div>
+                    
+                    <div class="bg-yellow-100 p-4 rounded-lg text-center border-l-4 border-yellow-500">
+                        <i class="fas fa-brain text-yellow-600 text-3xl mb-3"></i>
+                        <h4 class="font-bold text-yellow-700 mb-2">Psychological Edge</h4>
+                        <p class="text-sm text-gray-700">Retail: "Pullback = trend over"<br>Pro: "Pullback exhaustion = reload opportunity"<br><strong>Counter-sentiment advantage</strong></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Volume Profile Analysis -->
+        <section class="mb-16">
+            <div class="gradient-yellow text-black p-8 rounded-2xl mb-8 box-glow">
+                <h2 class="text-4xl font-bold text-center mb-4">
+                    <i class="fas fa-volume-up mr-3"></i>VOLUME PROFILE ANALYSIS
+                </h2>
+                <p class="text-center text-xl font-semibold">Xác định Liquidity Zones và Timing tối ưu cho Setup Entry</p>
+            </div>
+
+            <!-- Khái niệm Volume Profile -->
+            <div class="bg-white rounded-xl p-6 mb-8 box-glow">
+                <h3 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-chart-bar text-blue-500 mr-3"></i>Khái niệm Volume Profile trong Trading
+                </h3>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+                            <h4 class="font-bold text-blue-700 mb-2">
+                                <i class="fas fa-magnet mr-2"></i>High Volume Nodes (HVN)
+                            </h4>
+                            <p class="text-sm">Vùng có <strong>volume giao dịch cao</strong> trong sóng đẩy, nơi institutional traders tích cực mua/bán</p>
+                        </div>
+                        
+                        <div class="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
+                            <h4 class="font-bold text-green-700 mb-2">
+                                <i class="fas fa-crosshairs mr-2"></i>Liquidity Magnet Effect
+                            </h4>
+                            <p class="text-sm">HVN hoạt động như <strong>"nam châm thanh khoản"</strong>, hút giá pullback về để test lại</p>
+                        </div>
+                        
+                        <div class="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-500">
+                            <h4 class="font-bold text-orange-700 mb-2">
+                                <i class="fas fa-clock mr-2"></i>Absorption Timing
+                            </h4>
+                            <p class="text-sm">Khi giá về HVN và <strong>liquidity được khai thác</strong> → Setup cuối sóng hồi trở nên hợp lệ</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-r from-purple-100 to-blue-100 p-6 rounded-lg">
+                        <h4 class="text-xl font-bold mb-4 text-purple-800">
+                            <i class="fas fa-lightbulb mr-2"></i>Institutional Logic
+                        </h4>
+                        <div class="space-y-3">
+                            <p class="text-sm"><strong>1. Impulse Wave:</strong> Smart money tạo HVN trong quá trình accumulation/distribution</p>
+                            <p class="text-sm"><strong>2. Pullback Phase:</strong> Giá bị hút về HVN do unfinished business</p>
+                            <p class="text-sm"><strong>3. Liquidity Absorption:</strong> Smart money hoàn tất positions tại HVN</p>
+                            <p class="text-sm"><strong>4. Continuation:</strong> Setup entry trở nên valid sau khi liquidity được absorbed</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cách xác định HVN -->
+            <div class="bg-white rounded-xl p-6 mb-8 box-glow">
+                <h3 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-search text-green-500 mr-3"></i>Cách xác định High Volume Nodes (HVN)
+                </h3>
+                
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-red-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-red-700 mb-3">
+                            <i class="fas fa-chart-area mr-2"></i>TRONG SÓNG ĐẨY
+                        </h4>
+                        <ul class="space-y-2 text-sm">
+                            <li><i class="fas fa-check mr-2 text-green-600"></i>Volume >200% average tại breakout levels</li>
+                            <li><i class="fas fa-check mr-2 text-green-600"></i>Consolidation zones với high volume</li>
+                            <li><i class="fas fa-check mr-2 text-green-600"></i>Rejection areas với volume spikes</li>
+                            <li><i class="fas fa-check mr-2 text-green-600"></i>50%-61.8% retracement levels</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-blue-700 mb-3">
+                            <i class="fas fa-magnet mr-2"></i>LIQUIDITY MAGNET SIGNALS
+                        </h4>
+                        <ul class="space-y-2 text-sm">
+                            <li><i class="fas fa-arrow-down mr-2 text-red-500"></i>Giá pullback hướng về HVN</li>
+                            <li><i class="fas fa-clock mr-2 text-orange-500"></i>Multiple touches tại HVN level</li>
+                            <li><i class="fas fa-compress-alt mr-2 text-purple-500"></i>Price action tightening gần HVN</li>
+                            <li><i class="fas fa-volume-down mr-2 text-gray-500"></i>Volume giảm khi approach HVN</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-green-700 mb-3">
+                            <i class="fas fa-check-double mr-2"></i>ABSORPTION CONFIRMATION
+                        </h4>
+                        <ul class="space-y-2 text-sm">
+                            <li><i class="fas fa-volume-up mr-2 text-blue-500"></i>Volume spike tại HVN level</li>
+                            <li><i class="fas fa-hammer mr-2 text-green-500"></i>Rejection candles từ HVN</li>
+                            <li><i class="fas fa-chart-line mr-2 text-purple-500"></i>Momentum shift signals</li>
+                            <li><i class="fas fa-trophy mr-2 text-yellow-500"></i>Setup entry becomes valid!</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Integration với 2-Phase Analysis -->
+            <div class="bg-white rounded-xl p-6 mb-8 box-glow">
+                <h3 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-puzzle-piece text-purple-500 mr-3"></i>Integration với 2-Phase Wave Analysis
+                </h3>
+                
+                <div class="bg-gradient-to-r from-purple-50 to-blue-50 p-6 rounded-lg">
+                    <h4 class="text-xl font-bold mb-4 text-purple-800 text-center">
+                        <i class="fas fa-cogs mr-2"></i>ENHANCED SETUP VALIDATION PROCESS
+                    </h4>
+                    
+                    <div class="grid md:grid-cols-4 gap-4 mt-6">
+                        <div class="text-center">
+                            <div class="bg-red-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-2">
+                                <i class="fas fa-search text-red-600 text-xl"></i>
+                            </div>
+                            <h5 class="font-bold text-sm">STEP 1</h5>
+                            <p class="text-xs">Identify HVN trong previous impulse wave</p>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div class="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-2">
+                                <i class="fas fa-eye text-orange-600 text-xl"></i>
+                            </div>
+                            <h5 class="font-bold text-sm">STEP 2</h5>
+                            <p class="text-xs">Observe pullback hướng về HVN (magnet effect)</p>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-2">
+                                <i class="fas fa-clock text-blue-600 text-xl"></i>
+                            </div>
+                            <h5 class="font-bold text-sm">STEP 3</h5>
+                            <p class="text-xs">Wait for Phase 2 exhaustion + liquidity absorption</p>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-2">
+                                <i class="fas fa-rocket text-green-600 text-xl"></i>
+                            </div>
+                            <h5 class="font-bold text-sm">STEP 4</h5>
+                            <p class="text-xs">Execute entry when all confluences align</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Volume Thresholds & Signals -->
+            <div class="bg-white rounded-xl p-6 mb-8 box-glow">
+                <h3 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-tachometer-alt text-red-500 mr-3"></i>Volume Thresholds & Confirmation Signals
+                </h3>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="text-lg font-bold mb-4 text-gray-800">
+                            <i class="fas fa-chart-bar mr-2"></i>VOLUME MEASUREMENT STANDARDS
+                        </h4>
+                        <div class="space-y-3">
+                            <div class="bg-red-100 p-3 rounded border-l-4 border-red-500">
+                                <p class="font-semibold text-red-700">HVN Creation: Volume >200% của 20MA</p>
+                                <p class="text-sm text-gray-600">Institutional level activity</p>
+                            </div>
+                            <div class="bg-orange-100 p-3 rounded border-l-4 border-orange-500">
+                                <p class="font-semibold text-orange-700">Pullback Phase: Volume 120-180% của 20MA</p>
+                                <p class="text-sm text-gray-600">Normal retracement activity</p>
+                            </div>
+                            <div class="bg-blue-100 p-3 rounded border-l-4 border-blue-500">
+                                <p class="font-semibold text-blue-700">Exhaustion: Volume <60% của 20MA</p>
+                                <p class="text-sm text-gray-600">Lack of selling pressure</p>
+                            </div>
+                            <div class="bg-green-100 p-3 rounded border-l-4 border-green-500">
+                                <p class="font-semibold text-green-700">Absorption: Volume spike >250% tại HVN</p>
+                                <p class="text-sm text-gray-600">Liquidity absorption confirmed</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-lg font-bold mb-4 text-gray-800">
+                            <i class="fas fa-check-circle mr-2"></i>SETUP VALIDITY CHECKLIST
+                        </h4>
+                        <div class="space-y-2">
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" class="form-checkbox h-4 w-4 text-green-600">
+                                <span class="text-sm">HVN identified trong impulse wave</span>
+                            </label>
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" class="form-checkbox h-4 w-4 text-green-600">
+                                <span class="text-sm">Pullback hướng về HVN (magnet effect)</span>
+                            </label>
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" class="form-checkbox h-4 w-4 text-green-600">
+                                <span class="text-sm">Phase 2 pullback exhaustion confirmed</span>
+                            </label>
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" class="form-checkbox h-4 w-4 text-green-600">
+                                <span class="text-sm">Volume spike tại HVN level</span>
+                            </label>
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" class="form-checkbox h-4 w-4 text-green-600">
+                                <span class="text-sm">Momentum divergence present</span>
+                            </label>
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" class="form-checkbox h-4 w-4 text-green-600">
+                                <span class="text-sm">Price rejection từ HVN level</span>
+                            </label>
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" class="form-checkbox h-4 w-4 text-green-600">
+                                <span class="text-sm">Multi-timeframe alignment</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Applications -->
+            <div class="bg-white rounded-xl p-6 mb-8 box-glow">
+                <h3 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-rocket text-purple-500 mr-3"></i>Advanced Applications & Pro Tips
+                </h3>
+                
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-purple-50 p-4 rounded-lg border-t-4 border-purple-500">
+                        <h4 class="font-bold text-purple-700 mb-3">
+                            <i class="fas fa-layer-group mr-2"></i>MULTIPLE TIMEFRAME
+                        </h4>
+                        <ul class="space-y-2 text-sm">
+                            <li><i class="fas fa-arrow-up mr-2 text-green-500"></i><strong>HTF:</strong> Identify major HVN zones</li>
+                            <li><i class="fas fa-arrows-alt-h mr-2 text-blue-500"></i><strong>MTF:</strong> Pullback structure analysis</li>
+                            <li><i class="fas fa-arrow-down mr-2 text-red-500"></i><strong>LTF:</strong> Precise absorption timing</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-yellow-50 p-4 rounded-lg border-t-4 border-yellow-500">
+                        <h4 class="font-bold text-yellow-700 mb-3">
+                            <i class="fas fa-bullseye mr-2"></i>CONFLUENCE FACTORS
+                        </h4>
+                        <ul class="space-y-2 text-sm">
+                            <li><i class="fas fa-plus mr-2 text-green-500"></i>HVN + Fibonacci levels</li>
+                            <li><i class="fas fa-plus mr-2 text-green-500"></i>HVN + Previous support/resistance</li>
+                            <li><i class="fas fa-plus mr-2 text-green-500"></i>HVN + Order Block zones</li>
+                            <li><i class="fas fa-plus mr-2 text-green-500"></i>HVN + Round numbers</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-lg border-t-4 border-green-500">
+                        <h4 class="font-bold text-green-700 mb-3">
+                            <i class="fas fa-brain mr-2"></i>PSYCHOLOGY EDGE
+                        </h4>
+                        <ul class="space-y-2 text-sm">
+                            <li><i class="fas fa-users mr-2 text-blue-500"></i><strong>Retail:</strong> Fear khi giá về HVN</li>
+                            <li><i class="fas fa-chess mr-2 text-purple-500"></i><strong>Smart Money:</strong> Accumulate tại HVN</li>
+                            <li><i class="fas fa-trophy mr-2 text-yellow-500"></i><strong>Pro Edge:</strong> Trade with institutions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tổng kết -->
+        <section class="mb-16">
+            <div class="bg-gradient-to-r from-gray-800 to-gray-900 text-white p-8 rounded-2xl box-glow">
+                <h2 class="text-3xl font-bold text-center mb-6">
+                    <i class="fas fa-graduation-cap mr-3"></i>BÀI HỌC RÚT RA - MASTER TRADER INSIGHTS
+                </h2>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-bold mb-4 text-yellow-400">
+                            <i class="fas fa-key mr-2"></i>CORE PRINCIPLES
+                        </h3>
+                        <ul class="space-y-3">
+                            <li><i class="fas fa-wave-square mr-2 text-blue-400"></i>Mọi sóng đều có <strong>2 giai đoạn</strong>: Impulse → Exhaustion</li>
+                            <li><i class="fas fa-volume-up mr-2 text-green-400"></i><strong>Volume analysis</strong> xác định phase transition</li>
+                            <li><i class="fas fa-magnet mr-2 text-purple-400"></i><strong>HVN</strong> hoạt động như liquidity magnet</li>
+                            <li><i class="fas fa-clock mr-2 text-orange-400"></i><strong>Patience</strong> là yếu tố quyết định thành công</li>
+                            <li><i class="fas fa-shield-alt mr-2 text-red-400"></i><strong>Risk management</strong> luôn là ưu tiên số 1</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-bold mb-4 text-yellow-400">
+                            <i class="fas fa-trophy mr-2"></i>PROFESSIONAL EXECUTION
+                        </h3>
+                        <div class="bg-gray-700 p-4 rounded-lg">
+                            <p class="text-center mb-4 text-lg font-semibold text-green-400">
+                                "Setup Recognition → Phase Analysis → Volume Confirmation → Entry Execution → Risk Management → Profit Maximization"
+                            </p>
+                            <div class="text-center">
+                                <span class="bg-yellow-500 text-black px-4 py-2 rounded-full font-bold">
+                                    INSTITUTIONAL LEVEL STRATEGY
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 text-center">
+                    <p class="text-2xl font-bold text-yellow-400 mb-2">
+                        <i class="fas fa-star mr-2"></i>FINAL WISDOM
+                    </p>
+                    <p class="text-lg italic">
+                        "Thị trường thưởng cho những ai chờ đợi Phase 2 và trừng phạt những ai chống lại Phase 1. 
+                        Đây chính là ranh giới phân chia giữa amateur và professional traders."
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="gradient-bg text-white py-8 text-center">
+        <div class="container mx-auto px-4">
+            <p class="text-xl font-bold mb-2">
+                <i class="fas fa-chart-line mr-2"></i>Master these strategies, Master the markets
+            </p>
+            <p class="text-sm opacity-75">Professional Trading Strategies - Volume Profile Integration</p>
+        </div>
+    </footer>
+
+</body>
+</html>
